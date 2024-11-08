@@ -1,16 +1,16 @@
 package skpro.hw6.emplBook.service;
 
-import skpro.hw6.emplBook.Employee;
+import skpro.hw6.emplBook.model.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
 
-    public Employee addEmployee(String firstName, String lastName);
+    public Employee add(String firstName, String lastName);
 
-    public Employee removeEmployee(String firstName, String lastName);
+    public Employee remove(String firstName, String lastName);
 
-    public Employee findEmployee(String firstName, String lastName);
+    public Employee find(String firstName, String lastName);
 
-    public List<Employee> printListOfEmployee();
+    public List<Employee> list();
 }

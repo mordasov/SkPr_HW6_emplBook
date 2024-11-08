@@ -1,66 +1,50 @@
 package skpro.hw6.emplBook.service;
 
 import org.springframework.stereotype.Service;
-import skpro.hw6.emplBook.Employee;
+import skpro.hw6.emplBook.model.Employee;
 import skpro.hw6.emplBook.EmployeeAlreadyAddedException;
 import skpro.hw6.emplBook.EmployeeNotFoundExeption;
-import skpro.hw6.emplBook.EmployeeStorageIsFullException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-    private final static int SIZE = 3;
-    private int count = 0;
-    List<Employee> employeeList = new ArrayList<>(SIZE);
+    private final List<Employee> employeeList;
 
-    public Employee addEmployee(String firstName, String lastName) {
-        if (count >= SIZE) {
-            throw new EmployeeStorageIsFullException("Превышен лимит количества сотрудников");
-        }
-        Employee newEmployee = new Employee(firstName, lastName);
-        Iterator<Employee> iterator = employeeList.iterator();
-        while (iterator.hasNext()) {
-            Employee e = iterator.next();
-            if (newEmployee.equals(e)) {
-                throw new EmployeeAlreadyAddedException("Такой сотрудник уже есть");
-            }
-        }
-        employeeList.add(newEmployee);
-        count++;
-        return newEmployee;
+    public EmployeeServiceImpl() {
+        this.employeeList = new ArrayList<>();
     }
 
-    public Employee removeEmployee(String firstName, String lastName) {
-        Employee removeEmployee = new Employee(firstName, lastName);
-        int index = -1;
-        for (int i = 0; i < count; i++) {
-            if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
-                index = i;
-                count--;
-            }
+    public Employee add(String firstName, String lastName) {
+        Employee e = new Employee(firstName, lastName);
+        if (employeeList.contains(e)) {
+            throw new EmployeeAlreadyAddedException("ALREADY ADDED");
         }
-        if (index >= 0) {
-            employeeList.remove(index);
-            return removeEmployee;
-        } else {
-            throw new EmployeeNotFoundExeption("Сотрудник не найден");
-        }
+        employeeList.add(e);
+        return e;
     }
 
-    public Employee findEmployee(String firstName, String lastName) {
-        for (int i = 0; i < count; i++) {
-            if (employeeList.get(i).getFirstName().equals(firstName) && employeeList.get(i).getLastName().equals(lastName)) {
-                return employeeList.get(i);
-            }
+    public Employee remove(String firstName, String lastName) {
+        Employee e = new Employee(firstName, lastName);
+        if (employeeList.contains(e)) {
+            employeeList.remove(e);
+            return e;
         }
-        throw new EmployeeNotFoundExeption("Сотрудник не найден");
+        throw new EmployeeNotFoundExeption("NOT FOUND");
     }
 
-    public List<Employee> printListOfEmployee() {
-        return employeeList;
+    public Employee find(String firstName, String lastName) {
+        Employee e = new Employee(firstName, lastName);
+        if (employeeList.contains(e)) {
+            return e;
+        }
+        throw new EmployeeNotFoundExeption("NOT FOUND");
+    }
+
+    public List<Employee> list() {
+        return Collections.unmodifiableList(employeeList);
     }
 
 }

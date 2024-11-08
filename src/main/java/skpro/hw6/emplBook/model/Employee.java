@@ -1,4 +1,4 @@
-package skpro.hw6.emplBook;
+package skpro.hw6.emplBook.model;
 
 import java.util.Objects;
 
@@ -33,4 +33,11 @@ public class Employee {
         return Objects.hash(firstName, lastName);
     }
 
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }
